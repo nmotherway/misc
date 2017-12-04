@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Automatically adds branch name and branch description to every commit message.
+#
+NAME=$(git branch | grep '*' | sed 's/* //') 
+NAME_ABR=$(echo "$NAME" | egrep -oE '[A-Z]{3,}-[0-9]+')
+CONTENTS=$(cat "$1")
+MSG=`cat ~/Repositories/config-foxneod/.git/COMMIT_EDITMSG`
+
+if [[ ! "$MSG" =~ "$NAME_ABR" ]]
+then
+  if [[ "$NAME" = "$NAME_ABR" ]]
+  then
+    echo "$NAME"': '$CONTENTS > "$1"
+  else 
+    if [[ ${#NAME_ABR} > 2 ]]
+    then
+    	echo "$NAME"': '$CONTENTS > "$1" "Ticket:$NAME_ABR"
+    else
+     	echo "$NAME"': '$CONTENTS > "$1"  
+    fi
+  fi
+fi

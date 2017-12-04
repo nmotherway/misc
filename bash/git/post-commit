@@ -1,0 +1,10 @@
+#! /bin/bash
+echo "post-commit"
+tag=`git -C ~/Repositories/config-foxneod/ branch | grep \* |head -5 | sed 's/\* //g'`
+tag+="_"
+tag+=`date +%s`
+
+if [ "$tag" != "" ]; then
+    git tag -a "$tag" -m "`git log -1 --format=%s`"
+    echo "Created a new tag, $tag"
+fi
